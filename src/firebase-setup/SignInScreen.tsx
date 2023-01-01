@@ -4,15 +4,16 @@ import { uiConfig } from "./firebase-config";
 import { auth } from "./firebase-config";
 import { StyledFirebaseAuth } from "./StyledFirebaseAuth";
 import strings from "../app/strings";
-import firebase from "firebase/compat/app";
 
 export const SignInScreen = (config: firebaseui.auth.Config) => {
   //override the default with whatever we provide tot he component
   const thisConfig = { ...uiConfig, ...config };
   return (
-    <div className="row">
-      <h1>{strings.appName}</h1>
-      <StyledFirebaseAuth uiConfig={thisConfig} firebaseAuth={auth} />
+    <div className="container my-4">
+      <h1 className="my-4">Sign in to {strings.appName}</h1>
+      <div className="my-4">
+        <StyledFirebaseAuth uiConfig={thisConfig} firebaseAuth={auth} />
+      </div>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Image from "react-bootstrap/Image";
 import { selectPage, setPage, pages } from "./navSlice";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import strings from "../../app/strings";
 interface NavBarProps {
   children: JSX.Element | JSX.Element[] | undefined;
 }

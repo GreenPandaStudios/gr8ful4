@@ -13,6 +13,8 @@ import {
 import { postsQuery } from "./PostQueries";
 import { useFirestoreInfiniteQuery } from "@react-query-firebase/firestore";
 import { Post } from "../../types";
+import { Spinner } from "react-bootstrap";
+import { PostCard } from "./PostCard";
 
 interface FeedProps {}
 
@@ -21,25 +23,31 @@ export const Feed = (props: FeedProps) => {
 
   const posts = useFirestoreInfiniteQuery("posts", postsQuery, (snapshot) => {
     const lastDocument = snapshot.docs[snapshot.docs.length - 1];
-
+    if (lastDocument === undefined) return undefined;
     // Get the next 20 documents starting after the last document fetched.
     return query(postsQuery, startAfter(lastDocument));
   });
 
   if (posts.isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="my-4">
+        <Spinner />
+      </div>
+    );
   }
   if (posts.isError) {
-    return <div>{posts.error.message}</div>;
+    return <div>Please check your internet connection</div>;
   }
 
-  const renderFeedCards = (posts: Post[]) => {
-    return posts.map((post: Post) => (
+  const renderFeedCards = (postData: Post[]) => {
+    return (
       <>
-        <div>{post.postText}</div>
-        <div>{post.date.toDate().toLocaleDateString()}</div>
+        {postData.map((post: Post) => (
+          <PostCard post={post} />
+        ))}
+        <div className="my-4"></div>
       </>
-    ));
+    );
   };
 
   return posts.data && posts.data.pages ? (
@@ -48,11 +56,20 @@ export const Feed = (props: FeedProps) => {
         const datas: Post[] = [];
         querySnapshot.forEach(function (doc: DocumentData) {
           datas.push(doc.data() as Post);
-          console.log(doc.data());
         });
 
         return renderFeedCards(datas);
       })}
+      {posts.hasNextPage && (
+        <button
+          onClick={() => posts.fetchNextPage()}
+          className="btn btn-secondary"
+        >
+          Load More
+        </button>
+      )}
+      <div className="my-4 py-4"></div>
+      <div className="my-4 py-4"></div>
     </>
   ) : (
     <div>none</div>

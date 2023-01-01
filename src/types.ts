@@ -11,3 +11,6 @@ export interface Post {
   likes: string[]; //a list of users who liked the post
   postId: string;
 }
+export interface UserDisplayInfo {
+  name: string;
+}

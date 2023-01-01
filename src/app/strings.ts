@@ -1,5 +1,5 @@
 const strings = {
-  appName: "gr8ful4",
+  appName: "Gr8ful4",
 };
 
 export default strings;

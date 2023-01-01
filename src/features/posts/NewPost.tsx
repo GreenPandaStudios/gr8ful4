@@ -101,11 +101,11 @@ export const NewPost = () => {
           <div className="my-4">Something went wrong, please try again.</div>
         )}
         <button
-          disabled={posting}
+          disabled={posting || charCount === 0}
           onClick={post}
           className="row btn btn-primary"
         >
-          Post
+          Share My Gratitude
         </button>
       </div>
       <div></div>
