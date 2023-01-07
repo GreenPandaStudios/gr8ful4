@@ -68,7 +68,7 @@ export const DisplayInfo = (props: { userId: string }) => {
       <Form.Label>Display Name</Form.Label>
       <Form.Control
         type="name"
-        placeholder={userDisplayInfo.data[0].name}
+        placeholder={currentName}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           onNameTextChanged(event)
         }
