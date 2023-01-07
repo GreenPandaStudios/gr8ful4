@@ -65,13 +65,6 @@ export const NewPost = () => {
     setPostText(newText);
   }
 
-  /**
-   *  Validates the text and updates textarea content if needed
-   * @param currentText The current text in the text area
-   * @param newText The new text we wish to set if its valid
-   */
-  function ValidateText(currentText: string, newText: string): void {}
-
   return (
     <>
       <div className="jumbotron my-4">

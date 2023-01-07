@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import { Counter } from "./features/counter/Counter";
 import "./App.css";
@@ -9,51 +9,30 @@ import Container from "react-bootstrap/Container";
 import strings from "./app/strings";
 import { doc, setDoc } from "firebase/firestore";
 import { UserDisplayInfo } from "./types";
+import { useAuthUser } from "@react-query-firebase/auth/dist/auth/src/useAuthUser";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { selectUser, setUser, usertype } from "./features/users/userSlice";
 
 const App = () => {
-  const [user, setUser] = useState(auth.currentUser);
-
-  //override the callbacks in the default config object
-  const callbacks = {
-    // signInFailure callback must be provided to handle merge conflicts which
-    // occur when an existing credential is linked to an anonymous user.
-    signInFailure: function (
-      error: firebaseui.auth.AuthUIError
-    ): void | Promise<void> {
-      // For merge conflicts, the error.code will be
-      // 'firebaseui/anonymous-upgrade-merge-conflict'.
-      if (error.code != "firebaseui/anonymous-upgrade-merge-conflict") {
-        return Promise.resolve();
-      }
-
-      return;
-    },
-    signInSuccessWithAuthResult(
-      // tslint:disable-next-line:no-any firebase dependency not available.
-      authResult: any,
-      redirectUrl?: string
-    ) {
-      setUser(authResult.user);
-      //if this user first signed in, we want to set the username
-      try {
-        if (authResult.additionalUserInfo.isNewUser) {
-          const username = authResult.additionalUserInfo.profile.name;
-          if (username) {
-            const userId = auth.currentUser?.uid;
-            if (userId) {
-              setDoc(doc(db, "users", userId, "public-info", "display-info"), {
-                name: username,
-              } as UserDisplayInfo);
-            }
-          }
+  const dispatch = useAppDispatch();
+  useEffect(
+    () =>
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          dispatch(
+            setUser({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            })
+          );
+        } else {
+          dispatch(setUser(null));
         }
-      } catch {
-        /* do nothing*/
-      }
-
-      return false;
-    },
-  };
+      }),
+    []
+  );
+  const currentUser = useAppSelector(selectUser);
 
   return (
     <Container className="App">
@@ -63,7 +42,7 @@ const App = () => {
       >
         <h1 className="display-4 font-weight-normal">{strings.appName}</h1>
       </div>
-      {user === null ? <SignInScreen callbacks={callbacks} /> : <Navigation />}
+      {currentUser === null ? <SignInScreen /> : <Navigation />}
     </Container>
   );
 };

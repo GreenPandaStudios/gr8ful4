@@ -40,18 +40,21 @@ export const Feed = (props: FeedProps) => {
   }
 
   const renderFeedCards = (postData: Post[]) => {
+    if (postData.length === 0) return <></>;
     return (
-      <>
+      <div
+        key={postData[0].postId + "-" + postData[postData.length - 1].postId}
+      >
         {postData.map((post: Post) => (
-          <PostCard post={post} />
+          <PostCard post={post} key={post.postId} />
         ))}
         <div className="my-4"></div>
-      </>
+      </div>
     );
   };
 
   return posts.data && posts.data.pages ? (
-    <>
+    <div>
       {posts.data.pages.map((querySnapshot: QuerySnapshot<DocumentData>) => {
         const datas: Post[] = [];
         querySnapshot.forEach(function (doc: DocumentData) {
@@ -70,8 +73,8 @@ export const Feed = (props: FeedProps) => {
       )}
       <div className="my-4 py-4"></div>
       <div className="my-4 py-4"></div>
-    </>
+    </div>
   ) : (
-    <div>none</div>
+    <div>No posts</div>
   );
 };

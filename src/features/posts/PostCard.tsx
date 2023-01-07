@@ -18,35 +18,24 @@ export const PostCard = (props: PostCardProps) => {
     userDisplayQuery(userId)
   );
 
+  const displayName =
+    userDisplayInfo.isFetched && userDisplayInfo.data && userDisplayInfo.data[0]
+      ? userDisplayInfo.data[0].name
+      : "Somebody";
+
   return (
-    <div key={post.postId}>
+    <div>
       <div className="my-4"></div>
       <div className={"row"}>
-        <h6
-          className="text-muted my-4 mx-0 col-auto"
-          style={{
-            writingMode: "vertical-rl",
-          }}
-        >
-          {post.date.toDate().toLocaleDateString()}
-          <br></br>
-          {post.date.toDate().toLocaleTimeString()}
-        </h6>
-
         <div className="col">
-          {userDisplayInfo.isFetched &&
-            userDisplayInfo.data &&
-            userDisplayInfo.data[0] &&
-            userDisplayInfo.data[0].name && (
-              <>
-                <h6 className="card-title">{userDisplayInfo.data[0].name}</h6>
-              </>
-            )}
           <div className="card">
-            <p className="card-text text-muted text-justify-right">
-              I'm gr8ful4 ...
-            </p>
-            <p className="card-text  mb-4">{post.postText}</p>
+            <p className="m-4">{post.postText}</p>
+            <div className="row">
+              <span className="text-muted">
+                {displayName} was grateful on{" "}
+                {post.date.toDate().toLocaleDateString()}
+              </span>
+            </div>
           </div>
         </div>
       </div>

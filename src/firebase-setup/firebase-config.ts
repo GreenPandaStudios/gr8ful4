@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 
+import { useAuthSignInWithCredential } from "@react-query-firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { getFirestore } from "firebase/firestore";
@@ -35,6 +36,9 @@ export const uiConfig: firebaseui.auth.Config = {
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
+  callbacks: {
+    signInSuccessWithAuthResult: () => false,
+  },
 };
 
 // Initialize Firebase
