@@ -47,16 +47,19 @@ export const NewPost = () => {
   };
 
   function onTextChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
-    const elm = event.target;
+    setText(event.target.value);
+  }
+
+  function setText(text: string) {
     //Do not allow new lines
     const newLineRegex = /\r\n|\r|\n/gi;
-    const newText = elm.value.replaceAll(newLineRegex, " ");
-    elm.value = newText;
+    const newText = text.replaceAll(newLineRegex, " ");
+    text = newText;
     //validate the text length
     const cnt = newText.length;
     if (cnt > MAX_TEXT_LENGTH) {
       //revert the text
-      elm.value = postText;
+      text = postText;
       return;
     }
 
@@ -93,6 +96,15 @@ export const NewPost = () => {
         {error && (
           <div className="my-4">Something went wrong, please try again.</div>
         )}
+        <button
+          disabled={posting}
+          onClick={() =>
+            setText(postText.length === 0 ? "gr8ful4" : postText + " gr8ful4")
+          }
+          className="row btn btn-secondary"
+        >
+          gr8ful4
+        </button>
         <button
           disabled={posting || charCount === 0}
           onClick={post}
